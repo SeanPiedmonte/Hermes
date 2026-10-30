@@ -1,6 +1,7 @@
 #include "StockType.h"
+#include "Parser.h"
 
-void ProcessMessage(unsigned char *buffer, int len) {
+int ProcessMessage(unsigned char *buffer, int len) {
     int offset = 0;
     while (offset < len) {
         switch (buffer[offset]) {
@@ -31,4 +32,6 @@ void ProcessMessage(unsigned char *buffer, int len) {
                 printf("Error Not a Correct Message\n");
         }
     }
+
+    return 0;
 }
