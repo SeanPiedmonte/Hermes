@@ -212,3 +212,7 @@ with hardware, compiler and flags listed.*
 | Build | Hardware | Messages/sec | p50 | p99 | p99.9 |
 |---|---|---:|---:|---:|---:|
 | — | — | — | — | — | — |
+
+## License
+
+Released under the [MIT License](LICENSE).
