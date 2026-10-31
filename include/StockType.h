@@ -207,7 +207,7 @@ struct AddOrder {
     u8  BuySellIndicator;
     u32 Shares;
     u32 Price;
-    u32 Attribution; // This field is possible to not be present
+    u8  Attribution[5]; // This field is possible to not be present
 };
 
 struct ModifyOrderMessages {
@@ -252,7 +252,7 @@ struct DirectListing {
 struct Message {
     u16          TrackingNumber;
     u64          Timestamp;
-    u64          Stock;
+    u8           Stock[9];
     MessageType  Type;
     u16          StockLocate;
     InterestFlag IF; 
