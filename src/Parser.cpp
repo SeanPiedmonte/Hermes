@@ -47,7 +47,7 @@ i32 parse_add_message(u8 *buffer, i32 len, i32 offset, Message *msg) {
     msg->AddOrder.Attribution[0] = buffer[offset+25];  
     msg->AddOrder.Attribution[1] = buffer[offset+26];  
     msg->AddOrder.Attribution[2] = buffer[offset+27];  
-    msg->AddOrder.Attribution[3] = buffer[offset+28];  
+    msg->AddOrder.Attribution[3] = buffer[offset+25];  
     return res;
 }
 

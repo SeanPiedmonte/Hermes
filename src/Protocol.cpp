@@ -20,7 +20,26 @@ void print_message(Message *msg) {
                 printf("   TrackingNumber: %d\n", msg->TrackingNumber);
                 printf("   Timestamp     : %llu\n", msg->Timestamp);
                 printf("   Stock         : %s\n", msg->Stock);
+                printf("   StockLocate   : %d\n", msg->StockLocate);
+                printf("   AddOrder\n");
+                printf("      OrderReferenceNumber: %llu\n", msg->AddOrder.OrderReferenceNumber);
+                printf("      BuySellIndicator    : %d\n", msg->AddOrder.BuySellIndicator);
+                printf("      Shares              : %u\n", msg->AddOrder.Shares);
+                printf("      Price               : %u\n", msg->AddOrder.Price);
+                break; 
             case ADD_ORDER_MPID_ATTRIBUTION_MESSAGE:
+                printf("ADD ORDER NO MPID: \n");
+                printf("   TrackingNumber: %d\n", msg->TrackingNumber);
+                printf("   Timestamp     : %llu\n", msg->Timestamp);
+                printf("   Stock         : %s\n", msg->Stock);
+                printf("   StockLocate   : %d\n", msg->StockLocate);
+                printf("   AddOrder\n");
+                printf("      OrderReferenceNumber: %llu\n", msg->AddOrder.OrderReferenceNumber);
+                printf("      BuySellIndicator    : %d\n", msg->AddOrder.BuySellIndicator);
+                printf("      Shares              : %u\n", msg->AddOrder.Shares);
+                printf("      Price               : %u\n", msg->AddOrder.Price);
+                printf("      Attribution         : %s\n", msg->AddOrder.Attribution);
+                break;
             case ADD_ORDER_ORDER_EXECUTED_MESSAGE:
             case ADD_ORDER_ORDER_EXECUTED_WITH_PRICE_MESSAGE:
             case ORDER_CANCEL_MESSAGE:
