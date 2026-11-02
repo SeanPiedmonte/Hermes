@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef STOCK_TYPE_H
+#define STOCK_TYPE_H 
+
 #include "Protocol.h"
 
 enum MessageType {
@@ -275,3 +280,6 @@ struct Message {
     };
 };
 
+void print_message(Message *msg);
+
+#endif

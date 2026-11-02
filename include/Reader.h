@@ -1,9 +1,9 @@
 #ifndef READER_H
 #define READER_H
-#define CACHE_SIZE 192 * 1024
-#endif
 
 #include "stdlib.h"
 #include "stdio.h"
 
-void ReadToMemoryFile(char *source, unsigned char *buffer, int pos, int size);
+int read_to_memory_from_file(FILE *source, unsigned char *buffer, int pos, int size);
+
+#endif

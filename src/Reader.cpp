@@ -1,6 +1,5 @@
 #include "Reader.h"
 
-void ReadToMemoryFromFile(char *source, unsigned char *buffer, int pos, int size) {
-    FILE *file = fopen(source, "r");
-    fread(buffer, size, 1, file);
+int read_to_memory_from_file(FILE *source, unsigned char *buffer, int pos, int size) {
+    return fread(buffer, size, 1, source);
 }
