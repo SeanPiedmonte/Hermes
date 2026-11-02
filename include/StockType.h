@@ -6,6 +6,7 @@
 #include "Protocol.h"
 
 enum MessageType {
+    NONE                                               = 0,
     SYSTEM_EVENT_MESSAGE                               = 'S',
     STOCK_DIRECTORY_MESSAGE                            = 'R',
     STOCK_TRADING_ACTION_MESSAGE                       = 'H',
@@ -128,6 +129,7 @@ enum PriceVariation {
 };
 
 enum InterestFlag {
+    ZERO         = 0,
     RPI_BUY      = 'B',
     RPI_SELL     = 'S',
     RPI_BUY_SELL = 'A',

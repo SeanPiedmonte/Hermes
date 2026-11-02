@@ -54,33 +54,23 @@ void print_message(Message *msg) {
             default:
                 printf("Error Not a Correct Message\n");
     }
-    u16          TrackingNumber;
-    u64          Timestamp;
-    u8           Stock[9];
-    MessageType  Type;
-    u16          StockLocate;
-    InterestFlag IF; 
-    union {
-        SystemEvent               EventCode;
-        StockDirectory            Directory;
-        StockTradingAction        STA;
-        ShortSalePriceTestRI      SSPTRI;
-        MarketParticipantPosition MPP;
-        MWCBDeclineLevelMessage   MWCBDecLevMsg;
-        BreachedLevel             BL;
-        IPOQuotingPeriodUpdate    IPO;
-        LULDAuctionCollar         LULDAucCol;
-        OperationalHalt           Halt;
-        AddOrder                  AddOrder;
-        ModifyOrderMessages       ModifyOrder;
-        TradeMessage              TradeMessage;
-        NOIIMessage               NOIIMessage;
-        DirectListing             DirectListing;
+}
+
+Message zero_msg(void) {
+    Message msg = {
+        .TrackingNumber = 0,
+        .Timestamp = 0,
+        .Type = NONE,
+        .StockLocate = 0,
+        .IF = ZERO,
     };
+    msg.Stock[0] = '\0';
+    return msg;
 }
 
 int main(int argc, char **argv) {
-    u64 pos = 0, res;
+    u64 pos = 0;
+    i32 res = 0;
     u8 buffer[HOT_BUFFER_SIZE];
     char *infile_str;
     FILE *infile;
@@ -97,9 +87,9 @@ int main(int argc, char **argv) {
 
     infile_str = argv[1];
     while (pos) {
-        pos = read_to_memory_from_file(infile, buffer, pos, HOT_BUFFER_SIZE);
+        pos = read_to_memory_from_file(infile, buffer, HOT_BUFFER_SIZE);
         res = process_message(buffer, pos, &msg);
-        if (res == -1) {
+        if (res == 0) {
             return 1;
         }
 

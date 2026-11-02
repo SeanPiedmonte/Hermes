@@ -1,7 +1,7 @@
 #include "Parser.h"
 
-i32 parse_header(u8 *buffer, i32 len, i32 offset, Message *msg) {
-    u32 res = 0;
+i32 parse_header(u8 *buffer, u64 len, u64 offset, Message *msg) {
+    i32 res = 0;
     msg->Type = (MessageType)buffer[offset];
     msg->StockLocate = buffer[offset+2] << 8 | buffer[offset+1];
     msg->TrackingNumber = buffer[offset+4] << 8 | buffer[offset+3];
@@ -14,7 +14,7 @@ i32 parse_header(u8 *buffer, i32 len, i32 offset, Message *msg) {
     return res;
 }
 
-i32 extract_stock(u8 *buffer, i32 len, i32 offset, u8 *stock) {
+i32 extract_stock(u8 *buffer, u64 len, u64 offset, u8 *stock) {
     i32 res = 0, i = 0;
     while (buffer[offset] != ' ') {
         stock[i] = buffer[offset+i];
@@ -24,7 +24,7 @@ i32 extract_stock(u8 *buffer, i32 len, i32 offset, u8 *stock) {
     return res;
 }
 
-i32 parse_add_message(u8 *buffer, i32 len, i32 offset, Message *msg) {
+i32 parse_add_message(u8 *buffer, u64 len, u64 offset, Message *msg) {
     i32 res = 0;
     msg->AddOrder.OrderReferenceNumber = static_cast<u64>(buffer[offset+7]) << 56 |
                                          static_cast<u64>(buffer[offset+6]) << 48 |
@@ -51,8 +51,8 @@ i32 parse_add_message(u8 *buffer, i32 len, i32 offset, Message *msg) {
     return res;
 }
 
-i32 process_message(u8 *buffer, i32 len, Message *msg) {
-    i32 offset = 0, res = 0;
+i32 process_message(u8 *buffer, u64 len, Message *msg) {
+    u64 offset = 0, res = 0;
     while (offset < len) {
         res = parse_header(buffer, len, offset, msg);
         offset+=11;
