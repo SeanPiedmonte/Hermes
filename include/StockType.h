@@ -264,6 +264,7 @@ struct Message {
     u16          StockLocate;
     InterestFlag IF; 
     union {
+        int                       Empty;
         SystemEvent               EventCode;
         StockDirectory            Directory;
         StockTradingAction        STA;

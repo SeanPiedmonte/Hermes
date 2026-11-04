@@ -18,11 +18,11 @@ void print_message(Message *msg) {
             case ADD_ORDER_NO_MPID_ATTRIBUTION_MESSAGE:
                 printf("ADD ORDER NO MPID: \n");
                 printf("   TrackingNumber: %d\n", msg->TrackingNumber);
-                printf("   Timestamp     : %llu\n", msg->Timestamp);
+                printf("   Timestamp     : %lu\n", msg->Timestamp);
                 printf("   Stock         : %s\n", msg->Stock);
                 printf("   StockLocate   : %d\n", msg->StockLocate);
                 printf("   AddOrder\n");
-                printf("      OrderReferenceNumber: %llu\n", msg->AddOrder.OrderReferenceNumber);
+                printf("      OrderReferenceNumber: %lu\n", msg->AddOrder.OrderReferenceNumber);
                 printf("      BuySellIndicator    : %d\n", msg->AddOrder.BuySellIndicator);
                 printf("      Shares              : %u\n", msg->AddOrder.Shares);
                 printf("      Price               : %u\n", msg->AddOrder.Price);
@@ -30,11 +30,11 @@ void print_message(Message *msg) {
             case ADD_ORDER_MPID_ATTRIBUTION_MESSAGE:
                 printf("ADD ORDER NO MPID: \n");
                 printf("   TrackingNumber: %d\n", msg->TrackingNumber);
-                printf("   Timestamp     : %llu\n", msg->Timestamp);
+                printf("   Timestamp     : %lu\n", msg->Timestamp);
                 printf("   Stock         : %s\n", msg->Stock);
                 printf("   StockLocate   : %d\n", msg->StockLocate);
                 printf("   AddOrder\n");
-                printf("      OrderReferenceNumber: %llu\n", msg->AddOrder.OrderReferenceNumber);
+                printf("      OrderReferenceNumber: %lu\n", msg->AddOrder.OrderReferenceNumber);
                 printf("      BuySellIndicator    : %d\n", msg->AddOrder.BuySellIndicator);
                 printf("      Shares              : %u\n", msg->AddOrder.Shares);
                 printf("      Price               : %u\n", msg->AddOrder.Price);
@@ -60,17 +60,19 @@ Message zero_msg(void) {
     Message msg = {
         .TrackingNumber = 0,
         .Timestamp = 0,
+        .Stock = {0},
         .Type = NONE,
         .StockLocate = 0,
         .IF = ZERO,
+        .Empty = 0
     };
-    msg.Stock[0] = '\0';
     return msg;
 }
 
 int main(int argc, char **argv) {
-    u64 pos = 0;
+    u64 pos = 1;
     i32 res = 0;
+    i32 i   = 0;
     u8 buffer[HOT_BUFFER_SIZE];
     char *infile_str;
     FILE *infile;
@@ -79,20 +81,23 @@ int main(int argc, char **argv) {
         printf("USAGE ./hermes <stream>\n");
         return 1;
     }
+    infile_str = argv[1];
 
     infile = fopen(infile_str, "r");
     if (infile == NULL) {
         return -1;
     }
 
-    infile_str = argv[1];
     while (pos) {
+        printf("Iteration: %d\n", i);
         pos = read_to_memory_from_file(infile, buffer, HOT_BUFFER_SIZE);
         res = process_message(buffer, pos, &msg);
-        if (res == 0) {
+        if (res != 0) {
+            printf("Invalid processing\n");
             return 1;
         }
 
         print_message(&msg);
+        i++;
     }
 }
