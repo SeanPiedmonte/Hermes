@@ -74,7 +74,7 @@ int main(int argc, char **argv) {
     u8 buffer[HOT_BUFFER_SIZE];
     char *infile_str;
     FILE *infile;
-    Message msg = {0};
+    Message msg = zero_msg();
     if (argc != 2) {
         printf("USAGE ./hermes <stream>\n");
         return 1;
