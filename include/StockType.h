@@ -100,7 +100,7 @@ enum MarketCode {
 enum YesNoFlag {
     YES  = 'Y',
     NO   = 'N',
-    NONE = ' ',
+    EMPTY_YN = ' ',
 };
 
 enum ImbalanceDirection {

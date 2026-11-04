@@ -2,21 +2,25 @@
 
 i32 parse_header(u8 *buffer, u64 len, u64 offset, Message *msg) {
     i32 res = 0;
+    if (len < 11) {
+        return 1;
+    }
+
     msg->Type = (MessageType)buffer[offset];
-    msg->StockLocate = buffer[offset+2] << 8 | buffer[offset+1];
-    msg->TrackingNumber = buffer[offset+4] << 8 | buffer[offset+3];
-    msg->Timestamp = static_cast<u64>(buffer[offset+10]) << 40 | 
-                     static_cast<u64>(buffer[offset+9]) << 32 | 
-                     static_cast<u64>(buffer[offset+8]) << 24 | 
-                     static_cast<u64>(buffer[offset+7]) << 16 | 
-                     static_cast<u64>(buffer[offset+6]) << 8 |
-                     static_cast<u64>(buffer[offset+5]);
+    msg->StockLocate = static_cast<u16>(buffer[offset+2] << 8 | buffer[offset+1]);
+    msg->TrackingNumber = be16_conv(buffer[offset+3], buffer[offset+4]);
+    msg->Timestamp = be48_conv(&buffer[offset+5]);
     return res;
 }
 
 i32 extract_stock(u8 *buffer, u64 len, u64 offset, u8 *stock) {
-    i32 res = 0, i = 0;
-    while (buffer[offset] != ' ') {
+    u64 i = 0;
+    i32 res = 0;
+    if (len < 8) {
+        return 1;
+    }
+
+    while (buffer[offset+i] != ' ') {
         stock[i] = buffer[offset+i];
         i++;
     }
@@ -26,33 +30,21 @@ i32 extract_stock(u8 *buffer, u64 len, u64 offset, u8 *stock) {
 
 i32 parse_add_message(u8 *buffer, u64 len, u64 offset, Message *msg) {
     i32 res = 0;
-    msg->AddOrder.OrderReferenceNumber = static_cast<u64>(buffer[offset+7]) << 56 |
-                                         static_cast<u64>(buffer[offset+6]) << 48 |
-                                         static_cast<u64>(buffer[offset+5]) << 40 |
-                                         static_cast<u64>(buffer[offset+4]) << 32 |
-                                         static_cast<u64>(buffer[offset+3]) << 24 |
-                                         static_cast<u64>(buffer[offset+2]) << 16 |
-                                         static_cast<u64>(buffer[offset+1]) << 8  |
-                                         static_cast<u64>(buffer[offset]);
+    msg->AddOrder.OrderReferenceNumber = be64_conv(&buffer[offset]);
     msg->AddOrder.BuySellIndicator = buffer[offset+8];
-    msg->AddOrder.Shares           = static_cast<u32>(buffer[offset+12]) << 24 |
-                                     static_cast<u32>(buffer[offset+11]) << 16 |
-                                     static_cast<u32>(buffer[offset+10]) << 8  |
-                                     static_cast<u32>(buffer[offset+9]);
+    msg->AddOrder.Shares           = be32_conv(&buffer[offset+9]);
     res = extract_stock(buffer, offset+12, len, msg->Stock);
-    msg->AddOrder.Price = static_cast<u32>(buffer[offset+24]) << 24 |
-                          static_cast<u32>(buffer[offset+23]) << 16 |
-                          static_cast<u32>(buffer[offset+22]) << 8  |
-                          static_cast<u32>(buffer[offset+21]);
+    msg->AddOrder.Price = be32_conv(&buffer[offset+21]);
     msg->AddOrder.Attribution[0] = buffer[offset+25];  
     msg->AddOrder.Attribution[1] = buffer[offset+26];  
     msg->AddOrder.Attribution[2] = buffer[offset+27];  
-    msg->AddOrder.Attribution[3] = buffer[offset+25];  
+    msg->AddOrder.Attribution[3] = buffer[offset+28];  
     return res;
 }
 
 i32 process_message(u8 *buffer, u64 len, Message *msg) {
-    u64 offset = 0, res = 0;
+    u64 offset = 0; 
+    i32 res = 0;
     while (offset < len) {
         res = parse_header(buffer, len, offset, msg);
         offset+=11;

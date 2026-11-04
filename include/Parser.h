@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "StockType.h"
+#include "BigEndianConv.h"
 
 #define ITCH_HEADER_SIZE 11
 #define ADD_ORDER_NO_MPID_SIZE 25 // This is minus the size of the HEADER
