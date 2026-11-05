@@ -50,15 +50,25 @@ i32 process_message(u8 *buffer, u64 len, Message *msg) {
         offset+=11;
         switch (msg->Type) {
             case SYSTEM_EVENT_MESSAGE:
+                break;
             case STOCK_DIRECTORY_MESSAGE:
+                break;
             case STOCK_TRADING_ACTION_MESSAGE:
+                break;
             case REG_SHO_SHORT_SALE_PRICE_TEST_RESTRICTED_INDICATOR:
+                break;
             case MARKET_PARTICIPANT_POSITION_MESSAGE:
+                break;
             case MARKET_WIDE_CIRCUIT_BREAKER_DECLINE_LEVEL_MESSAGE:
+                break;
             case MARKET_WIDE_CIRCUIT_BREAKER_STATUS_MESSAGE:
+                break;
             case QUOTING_PERIOD_UPDATE:
+                break;
             case LULD_AUCTION_COLLAR:
+                break;
             case OPERATIONAL_HALT:
+                break;
             case ADD_ORDER_NO_MPID_ATTRIBUTION_MESSAGE:
                 msg->Type = ADD_ORDER_NO_MPID_ATTRIBUTION_MESSAGE;
                 res = parse_add_message(buffer, len, offset+1, msg);
@@ -70,17 +80,29 @@ i32 process_message(u8 *buffer, u64 len, Message *msg) {
                 offset += ADD_ORDER_MPID_SIZE;
                 break;
             case ADD_ORDER_ORDER_EXECUTED_MESSAGE:
+                break;
             case ADD_ORDER_ORDER_EXECUTED_WITH_PRICE_MESSAGE:
+                break;
             case ORDER_CANCEL_MESSAGE:
+                break;
             case ORDER_DELETE_MESSAGE:
+                break;
             case ORDER_REPLACE_MESSAGE:
+                break;
             case TRADE_MESSAGE:
+                break;
             case CROSS_TRADE_MESSAGE:
+                break;
             case BROKEN_TRADE_MESSAGE:
+                break;
             case NOII_MESSAGE:
+                break;
             case RETAIL_INTEREST_MESSAGE:
+                break;
             case DIRECT_LISTING_WITH_CAPITAL_RAISE_MESSAGE:
+                break;
             default:
+                printf("TYPE: %c\n", msg->Type);
                 printf("Error Not a Correct Message\n");
         }
     }

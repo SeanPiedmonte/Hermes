@@ -85,7 +85,7 @@ Message zero_msg(void) {
 }
 
 int main(int argc, char **argv) {
-    u64 pos = 1;
+    u64 pos = 0;
     i32 res = 0;
     i32 i   = 0;
     u8 buffer[HOT_BUFFER_SIZE];
@@ -103,7 +103,7 @@ int main(int argc, char **argv) {
         return -1;
     }
 
-    while (pos) {
+    do {
         printf("Iteration: %d\n", i);
         pos = read_to_memory_from_file(infile, buffer, HOT_BUFFER_SIZE);
         res = process_message(buffer, pos, &msg);
@@ -114,5 +114,5 @@ int main(int argc, char **argv) {
 
         print_message(&msg);
         i++;
-    }
+    } while (pos);
 }
