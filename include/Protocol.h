@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#ifndef L1D_CACHE_SIZE
+#if !defined(L1D_CACHE_SIZE) && !defined(ARCH)
     #if defined(__APPLE__) && defined(__aarch64__)
         #define L1D_CACHE_SIZE (64 * 1024)
     #elif defined(__x86_64__) || defined(_M_X64)

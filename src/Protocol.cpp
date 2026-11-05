@@ -18,11 +18,19 @@ void print_message(Message *msg) {
             case ADD_ORDER_NO_MPID_ATTRIBUTION_MESSAGE:
                 printf("ADD ORDER NO MPID: \n");
                 printf("   TrackingNumber: %d\n", msg->TrackingNumber);
+#ifdef __APPLE__
+                printf("   Timestamp     : %llu\n", msg->Timestamp);
+#else
                 printf("   Timestamp     : %lu\n", msg->Timestamp);
+#endif
                 printf("   Stock         : %s\n", msg->Stock);
                 printf("   StockLocate   : %d\n", msg->StockLocate);
                 printf("   AddOrder\n");
+#ifdef __APPLE__
+                printf("      OrderReferenceNumber: %llu\n", msg->AddOrder.OrderReferenceNumber);
+#else
                 printf("      OrderReferenceNumber: %lu\n", msg->AddOrder.OrderReferenceNumber);
+#endif
                 printf("      BuySellIndicator    : %d\n", msg->AddOrder.BuySellIndicator);
                 printf("      Shares              : %u\n", msg->AddOrder.Shares);
                 printf("      Price               : %u\n", msg->AddOrder.Price);
@@ -30,12 +38,19 @@ void print_message(Message *msg) {
             case ADD_ORDER_MPID_ATTRIBUTION_MESSAGE:
                 printf("ADD ORDER NO MPID: \n");
                 printf("   TrackingNumber: %d\n", msg->TrackingNumber);
+#ifdef __APPLE__            
+                printf("   Timestamp     : %llu\n", msg->Timestamp);
+#else
                 printf("   Timestamp     : %lu\n", msg->Timestamp);
+#endif
                 printf("   Stock         : %s\n", msg->Stock);
                 printf("   StockLocate   : %d\n", msg->StockLocate);
                 printf("   AddOrder\n");
-                printf("      OrderReferenceNumber: %lu\n", msg->AddOrder.OrderReferenceNumber);
+#ifdef __APPLE__
+                printf("      OrderReferenceNumber: %llu\n", msg->AddOrder.OrderReferenceNumber);
+#else
                 printf("      BuySellIndicator    : %d\n", msg->AddOrder.BuySellIndicator);
+#endif
                 printf("      Shares              : %u\n", msg->AddOrder.Shares);
                 printf("      Price               : %u\n", msg->AddOrder.Price);
                 printf("      Attribution         : %s\n", msg->AddOrder.Attribution);
