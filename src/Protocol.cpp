@@ -104,16 +104,14 @@ int main(int argc, char **argv) {
     }
 
     do {
-        printf("Iteration: %d\n", i);
         pos = read_to_memory_from_file(infile, buffer, HOT_BUFFER_SIZE);
-        printf("POS: %llu\n", pos);
         res = process_message(buffer, pos, &msg);
         if (res != 0) {
             printf("Invalid processing\n");
             return 1;
         }
 
-        //print_message(&msg);
+        print_message(&msg);
         i++;
-    } while (pos);
+    } while (pos && i < 2);
 }

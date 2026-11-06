@@ -46,11 +46,9 @@ i32 parse_add_message(u8 *buffer, u64 len, u64 offset, Message *msg) {
 i32 process_message(u8 *buffer, u64 len, Message *msg) {
     u64 offset = 0; 
     i32 res = 0;
-    printf("LEN: %llu\n", len);
     while (offset < len) {
-        printf("BUFFER Bytes: %02x %02x\n", buffer[offset], buffer[offset+1]);
-        res = parse_header(buffer, len, offset, msg);
-        offset+=11;
+        //res = parse_header(buffer, len, offset, msg);
+        //offset+=11;
         switch (msg->Type) {
             case SYSTEM_EVENT_MESSAGE:
                 break;
@@ -73,12 +71,15 @@ i32 process_message(u8 *buffer, u64 len, Message *msg) {
             case OPERATIONAL_HALT:
                 break;
             case ADD_ORDER_NO_MPID_ATTRIBUTION_MESSAGE:
-                printf("ADD_ORDER_NO_MPID_ATTRIBUTION_MESSAGE\n");
+                res = parse_header(buffer, len, offset, msg);
+                offset+=11;
                 msg->Type = ADD_ORDER_NO_MPID_ATTRIBUTION_MESSAGE;
                 res = parse_add_message(buffer, len, offset+1, msg);
                 offset += ADD_ORDER_NO_MPID_SIZE;
                 break;
             case ADD_ORDER_MPID_ATTRIBUTION_MESSAGE:
+                res = parse_header(buffer, len, offset, msg);
+                offset+=11;
                 msg->Type = ADD_ORDER_MPID_ATTRIBUTION_MESSAGE;
                 res = parse_add_message(buffer, len, offset+1, msg);
                 offset += ADD_ORDER_MPID_SIZE;
@@ -106,8 +107,7 @@ i32 process_message(u8 *buffer, u64 len, Message *msg) {
             case DIRECT_LISTING_WITH_CAPITAL_RAISE_MESSAGE:
                 break;
             default:
-                printf("TYPE: %c\n", msg->Type);
-                printf("Error Not a Correct Message\n");
+                //printf("Error Not a Correct Message\n");
         }
     }
 
