@@ -5,7 +5,7 @@ i32 parse_header(u8 *buffer, u64 len, u64 offset, Message *msg) {
     if (len < 11) {
         return 1;
     }
-
+    
     msg->Type = (MessageType)buffer[offset];
     msg->StockLocate = static_cast<u16>(buffer[offset+2] << 8 | buffer[offset+1]);
     msg->TrackingNumber = be16_conv(buffer[offset+3], buffer[offset+4]);
@@ -19,8 +19,9 @@ i32 extract_stock(u8 *buffer, u64 len, u64 offset, u8 *stock) {
     if (len < 8) {
         return 1;
     }
-
-    while (buffer[offset+i] != ' ') {
+   
+    // having to take in all 8 bytes while I figure out why the ' ' portion is nonexistent
+    while (/*buffer[offset+i] != ' ' &&*/ i < 8) {
         stock[i] = buffer[offset+i];
         i++;
     }
@@ -45,7 +46,9 @@ i32 parse_add_message(u8 *buffer, u64 len, u64 offset, Message *msg) {
 i32 process_message(u8 *buffer, u64 len, Message *msg) {
     u64 offset = 0; 
     i32 res = 0;
+    printf("LEN: %llu\n", len);
     while (offset < len) {
+        printf("BUFFER Bytes: %02x %02x\n", buffer[offset], buffer[offset+1]);
         res = parse_header(buffer, len, offset, msg);
         offset+=11;
         switch (msg->Type) {
@@ -70,6 +73,7 @@ i32 process_message(u8 *buffer, u64 len, Message *msg) {
             case OPERATIONAL_HALT:
                 break;
             case ADD_ORDER_NO_MPID_ATTRIBUTION_MESSAGE:
+                printf("ADD_ORDER_NO_MPID_ATTRIBUTION_MESSAGE\n");
                 msg->Type = ADD_ORDER_NO_MPID_ATTRIBUTION_MESSAGE;
                 res = parse_add_message(buffer, len, offset+1, msg);
                 offset += ADD_ORDER_NO_MPID_SIZE;
