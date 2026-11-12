@@ -4,7 +4,7 @@
 i32 parse_header(u8 *buffer, u64 len, u64 offset, Message *msg) {
     i32 res = 0;
     if (len - offset < 13 && len - offset != 0) {
-        return ERROR_TRUNCATED_HEADER;
+        return ERROR_TRUNCATED_MESSAGE;
     } else if (len - offset == 0) {
         return ERROR_ZERO_HEADER_LEN;
     }
@@ -57,6 +57,10 @@ i32 process_message(u8 *buffer, u64 len, Message *msg) {
         }
 
         offset+=ITCH_HEADER_SIZE;
+        if (msg->Length > len - offset) {
+            return ERROR_TRUNCATED_MESSAGE;
+        }
+
         switch (msg->Type) {
             case SYSTEM_EVENT_MESSAGE:
                 offset++;
