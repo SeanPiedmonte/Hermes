@@ -2,6 +2,7 @@
 #include "StockType.h"
 #include "Parser.h"
 #include "Reader.h"
+#include "Error.h"
 
 void print_message(Message *msg) {
     switch (msg->Type) {
@@ -106,8 +107,7 @@ int main(int argc, char **argv) {
     do {
         pos = read_to_memory_from_file(infile, buffer, HOT_BUFFER_SIZE);
         res = process_message(buffer, pos, &msg);
-        if (res != 0) {
-            printf("Invalid processing\n");
+        if (res != ERROR_TRUNCATED_HEADER && res) {
             return 1;
         }
 

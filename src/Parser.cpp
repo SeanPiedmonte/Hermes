@@ -3,14 +3,17 @@
 
 i32 parse_header(u8 *buffer, u64 len, u64 offset, Message *msg) {
     i32 res = 0;
-    if (len < 11) {
-        return 1;
+    if (len - offset < 13 && len - offset != 0) {
+        return ERROR_TRUNCATED_HEADER;
+    } else if (len - offset == 0) {
+        return ERROR_ZERO_HEADER_LEN;
     }
     
-    msg->Type = (MessageType)buffer[offset];
-    msg->StockLocate = static_cast<u16>(buffer[offset+2] << 8 | buffer[offset+1]);
-    msg->TrackingNumber = be16_conv(buffer[offset+3], buffer[offset+4]);
-    msg->Timestamp = be48_conv(&buffer[offset+5]);
+    msg->Length = static_cast<u16>((buffer[offset] << 8) | buffer[offset+1]);
+    msg->Type = (MessageType)buffer[offset+2];
+    msg->StockLocate = static_cast<u16>(buffer[offset+4] << 8 | buffer[offset+3]);
+    msg->TrackingNumber = be16_conv(buffer[offset+5], buffer[offset+6]);
+    msg->Timestamp = be48_conv(&buffer[offset+7]);
     return res;
 }
 
@@ -48,8 +51,12 @@ i32 process_message(u8 *buffer, u64 len, Message *msg) {
     u64 offset = 0; 
     i32 res = 0;
     while (offset < len) {
-        //res = parse_header(buffer, len, offset, msg);
-        //offset+=11;
+        res = parse_header(buffer, len, offset, msg);
+        if (res) {
+            return res;
+        }
+
+        offset+=ITCH_HEADER_SIZE;
         switch (msg->Type) {
             case SYSTEM_EVENT_MESSAGE:
                 offset++;
@@ -82,15 +89,15 @@ i32 process_message(u8 *buffer, u64 len, Message *msg) {
                 offset += OPERATIONAL_HALT_SIZE;
                 break;
             case ADD_ORDER_NO_MPID_ATTRIBUTION_MESSAGE:
-                res = parse_header(buffer, len, offset, msg);
-                offset+=ITCH_HEADER_SIZE;
+                /*res = parse_header(buffer, len, offset, msg);
+                offset+=ITCH_HEADER_SIZE;*/
                 msg->Type = ADD_ORDER_NO_MPID_ATTRIBUTION_MESSAGE;
                 res = parse_add_message(buffer, len, offset+1, msg);
                 offset += ADD_ORDER_NO_MPID_SIZE;
                 break;
             case ADD_ORDER_MPID_ATTRIBUTION_MESSAGE:
-                res = parse_header(buffer, len, offset, msg);
-                offset+=ITCH_HEADER_SIZE;
+                /*res = parse_header(buffer, len, offset, msg);
+                offset+=ITCH_HEADER_SIZE;*/
                 msg->Type = ADD_ORDER_MPID_ATTRIBUTION_MESSAGE;
                 res = parse_add_message(buffer, len, offset+1, msg);
                 offset += ADD_ORDER_MPID_SIZE;

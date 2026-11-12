@@ -258,6 +258,7 @@ struct DirectListing {
 
 struct Message {
     u16          TrackingNumber;
+    u16          Length;
     u64          Timestamp;
     u8           Stock[9];
     MessageType  Type;

@@ -4,8 +4,9 @@
 #include <stdio.h>
 #include "StockType.h"
 #include "BigEndianConv.h"
+#include "Error.h"
 
-#define ITCH_HEADER_SIZE 11
+#define ITCH_HEADER_SIZE 13
 #define STOCK_DIRECTORY_MESSAGE_SIZE 28
 #define STOCK_TRADING_ACTION_MESSAGE_SIZE 14
 #define REG_SHO_SHORT_SALE_PRICE_TEST_RESTRICTED_INDICATOR_SIZE 9
