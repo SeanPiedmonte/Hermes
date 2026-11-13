@@ -30,7 +30,7 @@
 #define RETAIL_INTEREST_MESSAGE_SIZE 9
 #define DIRECT_LISTING_WITH_CAPITAL_RAISE_MESSAGE_SIZE 37
 
-i32 process_message(u8 *buffer, u64 len, Message *msg);
+i32 process_message(u8 *buffer, u64 len, Message *msg, u8 *truncated_buffer);
 
 i32 parse_add_message(u8 *buffer, i32 len, u64 offset, Message *msg);
 i32 parse_header(u8 *buffer, u64 len, u64 offset, Message *msg);

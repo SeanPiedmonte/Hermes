@@ -90,6 +90,7 @@ int main(int argc, char **argv) {
     i32 res = 0;
     i32 i   = 0;
     u8 buffer[HOT_BUFFER_SIZE];
+    u8 truncated_buffer[sizeof(u16)]; 
     char *infile_str;
     FILE *infile;
     Message msg = zero_msg();
@@ -106,9 +107,10 @@ int main(int argc, char **argv) {
 
     do {
         pos = read_to_memory_from_file(infile, buffer, HOT_BUFFER_SIZE);
-        res = process_message(buffer, pos, &msg);
-        if (res != ERROR_TRUNCATED_HEADER && res) {
+        res = process_message(buffer, pos, &msg, truncated_buffer);
+        if (res != ERROR_TRUNCATED_MESSAGE && res) {
             return 1;
+        } else if (res == ERROR_TRUNCATED_MESSAGE) {
         }
 
         print_message(&msg);

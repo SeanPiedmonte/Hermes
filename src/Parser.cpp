@@ -47,9 +47,10 @@ i32 parse_add_message(u8 *buffer, u64 len, u64 offset, Message *msg) {
     return res;
 }
 
-i32 process_message(u8 *buffer, u64 len, Message *msg) {
+i32 process_message(u8 *buffer, u64 len, Message *msg, u8 *truncated_buffer) {
     u64 offset = 0; 
     i32 res = 0;
+    i32 pos = 0;
     while (offset < len) {
         res = parse_header(buffer, len, offset, msg);
         if (res) {
@@ -58,6 +59,9 @@ i32 process_message(u8 *buffer, u64 len, Message *msg) {
 
         offset+=ITCH_HEADER_SIZE;
         if (msg->Length > len - offset) {
+            while (offset < len) {
+                truncated_buffer[pos++] = buffer[offset++];
+            }
             return ERROR_TRUNCATED_MESSAGE;
         }
 
